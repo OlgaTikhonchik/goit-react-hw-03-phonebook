@@ -12,13 +12,39 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    console.log('App componentDidMount');
+
+    const LocalStoragecontacts = localStorage.getItem('contacts');
+    const parseContacts = JSON.parse(LocalStoragecontacts);
+    console.log(LocalStoragecontacts);
+
+    if (parseContacts) {
+      this.setState({ contacts: parseContacts });
+    }
+
+    console.log();
+  }
+
+  componentDidUpdate(prevPrors, prevState) {
+    console.log('App componentDidUpdate');
+    const nextContacts = this.state.contacts;
+    console.log('nextContacts:', nextContacts);
+    const prevContacts = prevState.contacts;
+    console.log('prevContacts:', prevContacts);
+
+    if (nextContacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(nextContacts));
+    }
+  }
+
   addContact = (name, number) => {
     if (
       this.state.contacts.some(
         el => el.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      return alert(`${name} вже є в контактах`);
+      return alert(`${name} already in contact`);
     }
 
     const contact = {
